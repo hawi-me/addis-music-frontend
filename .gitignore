@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# production build
+/dist
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.*.local
+
+# log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+Thumbs.db
