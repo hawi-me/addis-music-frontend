@@ -73,27 +73,13 @@ Development Server:
 Serves files from dist/ on port 3000 with auto-open and compression enabled.
 
 
-
-API Endpoints
-The app integrates with JSONPlaceholder (https://jsonplaceholder.typicode.com) for mock API calls:
-
-GET /posts?_page={page}&_limit={limit}: Fetches a paginated list of songs (mocked as song data).
-POST /posts: Creates a new song.
-DELETE /posts/{id}: Deletes a song.
-
 The API responses are transformed to include song attributes (title, artist, album, year) in the Redux store.
 AI Usage
-No AI tools (e.g., GitHub Copilot, ChatGPT) were used to generate any part of this project. All code was written manually to demonstrate problem-solving and coding skills. The code was verified through:
+
 
 Manual Testing: Running the app locally, performing CRUD operations, and checking pagination.
 Debugging: Using browser DevTools to inspect API calls and Redux state.
-Unit Tests: Running Jest tests (e.g., for the SongList component) to ensure rendering correctness.
 
-Bonus Features
-
-Testing: Unit tests for the SongList component using Jest and React Testing Library, located in src/tests/SongList.test.js.
-Performance: Code splitting implemented via Webpack’s splitChunks to optimize bundle size.
-Deployment: The app can be deployed to Netlify or Vercel by uploading the dist/ folder after running npm run build.
 
 Technologies Used
 
@@ -136,13 +122,7 @@ song-manager/
 ├── webpack.config.js
 └── README.md
 
-Deployment
-To deploy to Netlify or Vercel:
 
-Build the app: npm run build.
-Deploy the dist/ folder using the platform’s CLI or drag-and-drop interface.
-Netlify: netlify deploy --prod
-Vercel: vercel --prod
 
 
 
