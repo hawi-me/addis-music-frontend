@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
-import { fetchSongs } from '../redux/songsSlice';
+// import { fetchSongs } from '../redux/songsSlice';
+import { fetchSongs } from '../redux/songsSlice.js';
 
 const Button = styled.button`
   margin: 0 5px;
