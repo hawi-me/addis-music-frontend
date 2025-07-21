@@ -7,7 +7,6 @@ CRUD Operations: Create, read, update, and delete songs via API calls.
 State Management: Uses Redux Toolkit and Redux-Saga for global state and asynchronous operations.
 Responsive Styling: Styled with Emotion for a clean, responsive UI.
 Custom Webpack: Manually configured Webpack with support for JavaScript, JSX, CSS, and images.
-Testing: Includes unit tests with Jest and React Testing Library.
 
 Setup Instructions
 Prerequisites
@@ -27,9 +26,6 @@ Install Dependencies:
 npm install
 
 
-Create Environment File:Create a .env file in the root directory with:
-API_BASE_URL=https://jsonplaceholder.typicode.com
-
 
 Run the Development Server:
 npm start
@@ -41,8 +37,6 @@ npm run build
 
 The output will be in the dist/ folder.
 
-Run Tests:
-npm test
 
 
 
