@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 import NavBar from './NavBar.js';
-import { fetchSongs, deleteSong } from '../redux/songsSlice.js';
+import { fetchSongs, deleteSong, updateSong } from '../redux/songsSlice.js';
 
 const ListBackground = styled.div`
   min-height: 100vh;
@@ -119,11 +119,67 @@ const PageButton = styled.button`
   }
 `;
 
+// Add/Edit form styles
+const EditForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  margin-top: 0.5rem;
+`;
+const EditInput = styled.input`
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #e3e8ee;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f7faff;
+  width: 100%;
+  transition: border 0.2s, box-shadow 0.2s;
+  &:focus {
+    border: 1.5px solid #66a6ff;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(102, 166, 255, 0.10);
+    background: #fff;
+  }
+`;
+const EditButtonRow = styled.div`
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+`;
+const EditButton = styled.button`
+  background: linear-gradient(90deg, #66a6ff 0%, #89f7fe 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102, 166, 255, 0.10);
+  transition: background 0.2s, transform 0.2s;
+  &:hover {
+    background: linear-gradient(90deg, #89f7fe 0%, #66a6ff 100%);
+    transform: translateY(-2px) scale(1.04);
+  }
+`;
+const CancelButton = styled(EditButton)`
+  background: #e3e8ee;
+  color: #666;
+  &:hover {
+    background: #d1d8e6;
+    color: #222;
+  }
+`;
+
 const SongList = () => {
   const dispatch = useDispatch();
   const songs = useSelector((state) => state.songs.songs);
   const status = useSelector((state) => state.songs.status);
   const [page, setPage] = useState(1);
+  const [editId, setEditId] = useState(null);
+  const [editData, setEditData] = useState({ title: '', artist: '', album: '', year: '' });
   const limit = 10;
 
   useEffect(() => {
@@ -132,6 +188,32 @@ const SongList = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteSong(id));
+  };
+
+  const handleEdit = (song) => {
+    setEditId(song.id);
+    setEditData({
+      title: song.title,
+      artist: song.artist,
+      album: song.album,
+      year: song.year,
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditData({ ...editData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateSong({ id: editId, ...editData }));
+    setEditId(null);
+    setEditData({ title: '', artist: '', album: '', year: '' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditId(null);
+    setEditData({ title: '', artist: '', album: '', year: '' });
   };
 
   if (status === 'loading') return <ListBackground><ListContainer>Loading...</ListContainer></ListBackground>;
@@ -148,9 +230,53 @@ const SongList = () => {
             {songs.map((song) => (
               <SongCard key={song.id}>
                 <MusicIcon>🎵</MusicIcon>
-                <SongTitle>{song.title}</SongTitle>
-                <SongMeta>{song.artist} - {song.album} ({song.year})</SongMeta>
-                <DeleteButton onClick={() => handleDelete(song.id)}>Delete</DeleteButton>
+                {editId === song.id ? (
+                  <EditForm onSubmit={handleEditSubmit}>
+                    <EditInput
+                      type="text"
+                      name="title"
+                      value={editData.title}
+                      onChange={handleEditChange}
+                      placeholder="Title"
+                      required
+                    />
+                    <EditInput
+                      type="text"
+                      name="artist"
+                      value={editData.artist}
+                      onChange={handleEditChange}
+                      placeholder="Artist"
+                      required
+                    />
+                    <EditInput
+                      type="text"
+                      name="album"
+                      value={editData.album}
+                      onChange={handleEditChange}
+                      placeholder="Album"
+                    />
+                    <EditInput
+                      type="number"
+                      name="year"
+                      value={editData.year}
+                      onChange={handleEditChange}
+                      placeholder="Year"
+                    />
+                    <EditButtonRow>
+                      <EditButton type="submit">Save</EditButton>
+                      <CancelButton type="button" onClick={handleCancelEdit}>Cancel</CancelButton>
+                    </EditButtonRow>
+                  </EditForm>
+                ) : (
+                  <>
+                    <SongTitle>{song.title}</SongTitle>
+                    <SongMeta>{song.artist} - {song.album} ({song.year})</SongMeta>
+                    <div style={{ display: 'flex', gap: '0.7rem', marginTop: 'auto' }}>
+                      <EditButton type="button" onClick={() => handleEdit(song)}>Edit</EditButton>
+                      <DeleteButton onClick={() => handleDelete(song.id)}>Delete</DeleteButton>
+                    </div>
+                  </>
+                )}
               </SongCard>
             ))}
           </CardGrid>
